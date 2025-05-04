@@ -6,10 +6,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;   
 use App\Models\User;
 
+/**
+ * @OA\Info(
+ *     version="1.0.0",
+ *     title="Laravel API Documentation",
+ *     description="API Documentation for Laravel application",
+ *     @OA\Contact(
+ *         email="admin@example.com"
+ *     )
+ * )
+ */
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/users",
+     *     tags={"Users"},
+     *     summary="Get list of users",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(type="array", @OA\Items(type="object"))
+     *     )
+     * )
      */
     public function index()
     {
@@ -27,6 +47,31 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/users",
+     *     tags={"Users"},
+     *     summary="Create a new user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","email","password","password_confirmation","age"},
+     *             @OA\Property(property="name", type="string", maxLength=255),
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="age", type="integer", minimum=1, maximum=120),
+     *             @OA\Property(property="password", type="string", minLength=8),
+     *             @OA\Property(property="password_confirmation", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User created successfully",
+     *         @OA\JsonContent(type="object")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
